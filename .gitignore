@@ -1,0 +1,14 @@
+*.py[cod]
+media
+static
+.idea
+cache/*
+logs/*
+log/*
+*.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
+src/settings/env/development.py
+config/pgdata/*
+venv/*

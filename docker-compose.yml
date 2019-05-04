@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+
+  nginx:
+    restart: always
+    image: dimka2014/nginx-upload-with-progress-modules:latest
+    container_name: nginx_employeebase
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/src
+      - ./config/nginx:/etc/nginx/conf.d
+      - ./src/static:/static
+      - ./src/media:/media/
+    depends_on:
+      - web
+
+  web:
+    restart: always
+    build: .
+    container_name: web_employeebase
+    env_file: .env
+    volumes:
+      - ./src:/src
+    ports:
+      - "8002:8002"
+    links:
+      - postgresql
+    depends_on:
+      - postgresql
+
+  postgresql:
+    restart: always
+    image: postgres:10
+    container_name: postgresql_employeebase
+    env_file: .env
+    volumes:
+      - db-data:/var/lib/postgresql/data/pgdata
+    ports:
+      - "5433:5432"
+
+volumes:
+  db-data:
