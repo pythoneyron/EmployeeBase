@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Пользователи{% endblock title %}
+
+{% block content %}
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Пользователи</h1>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Список пользователей</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ФИО</th>
+                            <th>Возраст</th>
+                            <th>Компания</th>
+                            <th>Должность</th>
+                            <th>Отдел</th>
+                            <th>Дата начала работы</th>
+                            <th>Статус</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>ФИО</th>
+                            <th>Возраст</th>
+                            <th>Компания</th>
+                            <th>Должность</th>
+                            <th>Отдел</th>
+                            <th>Дата начала работы</th>
+                            <th>Статус</th>
+                        </tr>
+                        </tfoot>
+
+                        <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.get_full_name }}</td>
+                                <td>{{ user.get_age }}</td>
+                                <td>{{ user.company.title }}</td>
+                                <td>{{ user.position }}</td>
+                                <td>{{ user.get_section }}</td>
+                                <td>{{ user.start_date|default_if_none:'' }}</td>
+                                <td>{{ user.get_status }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+{% endblock content %}

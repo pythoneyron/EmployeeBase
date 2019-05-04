@@ -1,7 +1,9 @@
+from datetime import date
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.utils.translation import gettext as _
 from django.core import validators
+from dateutil.relativedelta import relativedelta
 
 from apps.accounts.choices import SectionUser
 from apps.company.models import Company
@@ -9,21 +11,22 @@ from apps.company.models import Company
 
 # create user in admin and create superuser in manage.py
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, email, date_birth, password=None):
         if not email:
             raise ValueError(_('Пользователь должен иметь адрес электронной почты'))
 
         user = self.model(
             email=UserManager.normalize_email(email),
             username=UserManager.normalize_email(email),
+            date_birth=date_birth,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password):
-        user = self.create_user(email, password=password)
+    def create_superuser(self, email, date_birth, password):
+        user = self.create_user(email, date_birth, password=password)
         user.is_active = True
         user.is_admin = True
         user.is_staff = True
@@ -46,7 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(verbose_name=_('Имя'), max_length=255)
     last_name = models.CharField(verbose_name=_('Фамилия'), max_length=255)
     middle_name = models.CharField(verbose_name=_('Отчество'), max_length=255)
-    date_birth = models.DateField(verbose_name=_('Дата рождения'), blank=True, null=True)
+    date_birth = models.DateField(verbose_name=_('Дата рождения'))
     email = models.EmailField(verbose_name=_('E-mail'), max_length=255, unique=True)
     phone_number = models.CharField(verbose_name=_('Номер телефона'), max_length=12, unique=True)
     start_date = models.DateField(verbose_name=_('Дата начала работы'), blank=True, null=True)
@@ -62,10 +65,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ('date_birth',)
 
     def get_full_name(self):
-        full_name = '{first_name} {last_name} {middle_name}'.format(
-            first_name=self.first_name, last_name=self.last_name, middle_name=self.middle_name
+        full_name = '{last_name} {first_name} {middle_name}'.format(
+            last_name=self.last_name, first_name=self.first_name, middle_name=self.middle_name
         )
         return full_name
 
@@ -74,6 +78,16 @@ class User(AbstractBaseUser, PermissionsMixin):
             last_name=self.last_name, first_name=self.first_name,
         )
         return short_name
+
+    def get_age(self):
+        age = relativedelta(date.today(), self.date_birth)
+        return age.years
+
+    def get_status(self):
+        return _('Активный') if self.is_active else _('Архивный')
+
+    def get_section(self):
+        return SectionUser.CHOICES[self.section][-1]
 
     class Meta:
         verbose_name = _('Пользователь')
