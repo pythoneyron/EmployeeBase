@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 from django.core import validators
 
 from apps.accounts.choices import SectionUser
+from apps.company.models import Company
 
 
 # create user in admin and create superuser in manage.py
@@ -51,6 +52,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     start_date = models.DateField(verbose_name=_('Дата начала работы'), blank=True, null=True)
     end_date = models.DateField(verbose_name=_('Дата окончания работы'), blank=True, null=True)
     position = models.CharField(verbose_name=_('Должность'), max_length=255)
+    company = models.ForeignKey(Company, verbose_name=_('Компания'), related_name='users', blank=True, null=True,
+                                on_delete=models.CASCADE)
     section = models.PositiveIntegerField(verbose_name=_('Отдел'), choices=SectionUser.CHOICES,
                                           default=SectionUser.Intern)
     is_staff = models.BooleanField(verbose_name=_('Персонал'), default=False)
