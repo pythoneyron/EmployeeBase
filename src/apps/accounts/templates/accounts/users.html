@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load filters_tags %}
 
 {% block title %}Пользователи{% endblock title %}
+
+{% block meta %}
+    <link rel="stylesheet" href="{% static 'css/accounts/accounts.css' %}">
+{% endblock meta %}
 
 {% block content %}
     <!-- Begin Page Content -->
@@ -16,47 +22,141 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>ФИО</th>
-                            <th>Возраст</th>
-                            <th>Компания</th>
-                            <th>Должность</th>
-                            <th>Отдел</th>
-                            <th>Дата начала работы</th>
-                            <th>Статус</th>
-                        </tr>
-                        </thead>
-                        <tfoot>
-                        <tr>
-                            <th>ID</th>
-                            <th>ФИО</th>
-                            <th>Возраст</th>
-                            <th>Компания</th>
-                            <th>Должность</th>
-                            <th>Отдел</th>
-                            <th>Дата начала работы</th>
-                            <th>Статус</th>
-                        </tr>
-                        </tfoot>
 
-                        <tbody>
-                        {% for user in users %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="dataTables_length" id="dataTable_length">
+                                <label>Show
+                                    <select name="dataTable_length" aria-controls="dataTable" class="custom-select-js custom-select-sm form-control form-control-sm">
+                                        <option value="5" {% if paginate_by == '5' %} selected {% endif %}>5</option>
+                                        <option value="10" {% if paginate_by == '10' %} selected {% endif %}>10</option>
+                                        <option value="25" {% if paginate_by == '25' %} selected {% endif %}>25</option>
+                                        <option value="50" {% if paginate_by == '50' %} selected {% endif %}>50</option>
+                                    </select> entries
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div id="dataTable_filter" class="dataTables_filter"><label>Search:
+                                <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
                             <tr>
-                                <td>{{ user.id }}</td>
-                                <td>{{ user.get_full_name }}</td>
-                                <td>{{ user.get_age }}</td>
-                                <td>{{ user.company.title }}</td>
-                                <td>{{ user.position }}</td>
-                                <td>{{ user.get_section }}</td>
-                                <td>{{ user.start_date|default_if_none:'' }}</td>
-                                <td>{{ user.get_status }}</td>
+                                <th>ID</th>
+                                <th>ФИО</th>
+                                <th>Возраст</th>
+                                <th>Компания</th>
+                                <th>Должность</th>
+                                <th>Отдел</th>
+                                <th>Дата начала работы</th>
+                                <th>Дата окончания работы</th>
+                                <th>Статус</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>ID</th>
+                                <th>ФИО</th>
+                                <th>Возраст</th>
+                                <th>Компания</th>
+                                <th>Должность</th>
+                                <th>Отдел</th>
+                                <th>Дата начала работы</th>
+                                <th>Дата окончания работы</th>
+                                <th>Статус</th>
+                            </tr>
+                            </tfoot>
+
+                            <tbody>
+                            {% for user in users %}
+                                <tr>
+                                    <td>{{ user.id }}</td>
+                                    <td>{{ user.get_full_name }}</td>
+                                    <td>{{ user.get_age }}</td>
+                                    <td>{{ user.company.title }}</td>
+                                    <td>{{ user.position }}</td>
+                                    <td>{{ user.get_section }}</td>
+                                    <td>{{ user.start_date|default_if_none:'' }}</td>
+                                    <td>{{ user.end_date|default_if_none:'Работает в настоящее время' }}</td>
+                                    <td>{{ user.get_status }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-5">
+                            <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">
+                                Всего пользователей {{ all_users }}, показаны {{ page_obj.start_index }} - {{ page_obj.end_index }}
+                            </div>
+                        </div>
+
+                        {% if is_paginated %}
+                            <div class="col-sm-12 col-md-7">
+                                <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                                    <ul class="pagination">
+                                        {% if page_obj.has_previous %}
+                                            <li class="paginate_button page-item previous">
+                                                <a href="?{% url_replace request 'page' page_obj.previous_page_number %}" class="page-link">Предыдущая</a>
+                                            </li>
+                                        {% else %}
+                                            <li class="paginate_button page-item previous disabled">
+                                                <a class="page-link">Предыдущая</a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% if page_obj.number|add:'-2' > 1 %}
+                                            <li class="paginate_button page-item">
+                                                <a href="?{% url_replace request 'page' 1 %}" class="page-link">1</a>
+                                            </li>
+
+                                            <li class="paginate_button page-item disabled">
+                                                <a class="page-link">…</a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% for page in paginator.page_range %}
+                                            {% if page == page_obj.number %}
+                                                <li class="paginate_button page-item active">
+                                                    <a class="page-link">{{ page }}</a>
+                                                </li>
+                                            {% elif page > page_obj.number|add:'-3' and page < page_obj.number|add:'3' %}
+                                                <li class="paginate_button page-item">
+                                                    <a href="?{% url_replace request 'page' page %}" class="page-link">{{ page }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        {% if paginator.num_pages > page_obj.number|add:'2' %}
+                                            <li class="paginate_button page-item disabled">
+                                                <a class="page-link">…</a>
+                                            </li>
+                                            <li class="paginate_button page-item">
+                                                <a href="?{% url_replace request 'page' paginator.num_pages %}" class="page-link">{{paginator.num_pages}}</a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% if page_obj.has_next %}
+                                            <li class="paginate_button page-item next">
+                                                <a href="?{% url_replace request 'page' page_obj.next_page_number %}" class="page-link">Следующая</a>
+                                            </li>
+                                        {% else %}
+                                            <li class="paginate_button page-item next previous">
+                                                <a class="page-link">Следующая</a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,3 +164,7 @@
     </div>
     <!-- /.container-fluid -->
 {% endblock content %}
+
+{% block script %}
+    <script src="{% static 'js/accounts/accounts.js' %}"></script>
+{% endblock script %}

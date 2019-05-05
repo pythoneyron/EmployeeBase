@@ -17,3 +17,8 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ('id', 'email', 'first_name', 'last_name', )
     list_filter = ('is_active', 'section')
     list_editable = ('is_active', 'section')
+
+    def save_form(self, request, form, change):
+        user = super(UserAdmin, self).save_form(request, form, change)
+        user.username = user.email
+        return user
