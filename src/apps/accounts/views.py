@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.contrib.auth import logout as auth_logout
 from django.views.generic.edit import View
 
@@ -37,6 +37,18 @@ class ListUsersView(ListView):
         context['filter_section'] = self.request.GET.get('section')
         context['all_users'] = self.get_queryset().count()
         context['all_sections'] = SectionUser.CHOICES
+        return context
+
+
+class DetaiUsersView(DetailView):
+    model = User
+    template_name = 'accounts/user_detail.html'
+    context_object_name = 'user'
+
+    def get_context_data(self, **kwargs):
+        context = super(DetaiUsersView, self).get_context_data(**kwargs)
+        if 'pk' in self.kwargs:
+            context['pk_user'] = self.kwargs['pk']
         return context
 
 

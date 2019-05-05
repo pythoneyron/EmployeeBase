@@ -26,13 +26,13 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
                             <div class="dataTables_length" id="dataTable_length">
-                                <label>Show
+                                <label>Показать
                                     <select name="dataTable_length" aria-controls="dataTable" class="custom-select-js custom-select-sm form-control form-control-sm">
                                         <option value="5" {% if paginate_by == '5' %} selected {% endif %}>5</option>
                                         <option value="10" {% if paginate_by == '10' %} selected {% endif %}>10</option>
                                         <option value="25" {% if paginate_by == '25' %} selected {% endif %}>25</option>
                                         <option value="5    0" {% if paginate_by == '50' %} selected {% endif %}>50</option>
-                                    </select> entries
+                                    </select> пользователей
                                 </label>
                             </div>
                         </div>
@@ -45,6 +45,7 @@
 
                                     {% if all_sections %}
                                         <label>Отдел:
+                                            <!--<input type="text"  class="form-control form-control-sm" value="{{ filter_company }}" name="company">-->
                                             <select id="selectSection" class="form-control form-control-sm" name="section">
                                                 <option value="" {% if not filter_section %} selected {% endif %}>Все</option>
                                                 {% for section in all_sections %}
@@ -93,7 +94,11 @@
                             <tbody>
                             {% for user in users %}
                                 <tr>
-                                    <td>{{ user.id }}</td>
+                                    <td>
+                                        <a href="{% url 'accounts:detail' user.pk %}">
+                                            {{ user.id }}
+                                        </a>
+                                    </td>
                                     <td>{{ user.get_full_name }}</td>
                                     <td>{{ user.get_age }}</td>
                                     <td>{{ user.company.title }}</td>

@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load filters_tags %}
+
+{% block title %}Детальная страница пользователя{% endblock title %}
+
+{% block meta %}
+<link rel="stylesheet" href="{% static 'css/accounts/accounts.css' %}">
+{% endblock meta %}
+
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Content Row -->
+    <div class="row">
+
+        <div class="col-lg-3"></div>
+
+        <!-- Second Column -->
+        <div class="col-lg-6">
+            <!-- Background Gradient Utilities -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Профиль пользователя</h6>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                            <label>Имя: </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-control form-control-user">{{ user.first_name }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                            <label>Фамилия: </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-control form-control-user">{{ user.last_name }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                            <label>Отчество: </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-control form-control-user">{{ user.middle_name }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                            <label>Дата рождения: </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-control form-control-user">{{ user.date_birth }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                            <label>E-Mail: </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-control form-control-user">{{ user.email }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                            <label>Телефон: </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-control form-control-user">{{ user.phone_number }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                            <label>Дата начала работы: </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-control form-control-user">{{ user.start_date }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                            <label>Дата окончания работы: </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-control form-control-user">{{ user.end_date }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                            <label>Должность: </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-control form-control-user">{{ user.position }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                            <label>Компания: </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-control form-control-user">{{ user.company }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                            <label>Отдел: </label>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-control form-control-user">{{ user.get_section_display }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3"></div>
+
+    </div>
+
+</div>
+
+{% endblock content %}
+
