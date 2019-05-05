@@ -1,6 +1,10 @@
+from django.shortcuts import redirect
 from django.views.generic import ListView
+from django.contrib.auth import logout as auth_logout
+from django.views.generic.edit import View
 
 from apps.accounts.models import User
+from apps.accounts.choices import SectionUser
 
 
 class ListUsersView(ListView):
@@ -29,5 +33,16 @@ class ListUsersView(ListView):
     def get_context_data(self, **kwargs):
         context = super(ListUsersView, self).get_context_data(**kwargs)
         context['paginate_by'] = self.request.GET.get('paginate_by', '')
+        context['filter_company'] = self.request.GET.get('company', '')
+        context['filter_section'] = self.request.GET.get('section')
         context['all_users'] = self.get_queryset().count()
+        context['all_sections'] = SectionUser.CHOICES
         return context
+
+
+class LogoutFormView(View):
+    """ Выход из профиля """
+
+    def get(self, request):
+        auth_logout(request)
+        return redirect('/')

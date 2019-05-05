@@ -31,15 +31,32 @@
                                         <option value="5" {% if paginate_by == '5' %} selected {% endif %}>5</option>
                                         <option value="10" {% if paginate_by == '10' %} selected {% endif %}>10</option>
                                         <option value="25" {% if paginate_by == '25' %} selected {% endif %}>25</option>
-                                        <option value="50" {% if paginate_by == '50' %} selected {% endif %}>50</option>
+                                        <option value="5    0" {% if paginate_by == '50' %} selected {% endif %}>50</option>
                                     </select> entries
                                 </label>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
-                            <div id="dataTable_filter" class="dataTables_filter"><label>Search:
-                                <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable">
-                                </label>
+                            <div id="dataTable_filter" class="dataTables_filter">
+                                <form id="filterForm" role="form" action="{% url 'accounts:users' %}" method="get">
+                                    <label>Компания:
+                                        <input type="text"  class="form-control form-control-sm" value="{{ filter_company }}" name="company">
+                                    </label>
+
+                                    {% if all_sections %}
+                                        <label>Отдел:
+                                            <select id="selectSection" class="form-control form-control-sm" name="section">
+                                                <option value="" {% if not filter_section %} selected {% endif %}>Все</option>
+                                                {% for section in all_sections %}
+                                                    <option value="{{ section.0 }}" {% if section.0|slugify == filter_section %} selected {% endif %}>{{ section.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </label>
+                                    {% endif %}
+
+                                    <button type="submit" class="btn btn-primary btn-icon-split"><span class="text">Поиск</span></button>
+                                    <button type="reset" class="btn-reset-js btn btn-danger btn-icon-split"><span class="text">Сбросить</span></button>
+                                </form>
                             </div>
                         </div>
                     </div>
