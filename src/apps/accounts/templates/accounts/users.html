@@ -38,7 +38,32 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div id="dataTable_filter" class="dataTables_filter">
-                                <form id="filterForm" role="form" action="{% url 'accounts:users' %}" method="get">
+                                {% if 'alphabet' in request.path %}
+                                    <div id="filterAlphabet">
+                                        <button type="submit" value="А-Г" name="alphabet_range" class="btn btn-light btn-icon-split {% if 'А-Г' in request.GET.values %} active {% endif %}">
+                                            <span class="text">A - Г</span>
+                                        </button>
+                                        <button type="submit" value="Д-Ж" name="alphabet_range" class="btn btn-light btn-icon-split {% if 'Д-Ж' in request.GET.values %} active {% endif %}"">
+                                            <span class="text">Д - Ж</span>
+                                        </button>
+                                        <button type="submit" value="З-Л" name="alphabet_range" class="btn btn-light btn-icon-split {% if 'З-Л' in request.GET.values %} active {% endif %}"">
+                                            <span class="text">З - Л</span>
+                                        </button>
+                                        <button type="submit" value="М-П" name="alphabet_range" class="btn btn-light btn-icon-split {% if 'М-П' in request.GET.values %} active {% endif %}"">
+                                            <span class="text">М - П</span>
+                                        </button>
+                                        <button type="submit" value="Р-У" name="alphabet_range" class="btn btn-light btn-icon-split {% if 'Р-У' in request.GET.values %} active {% endif %}"">
+                                            <span class="text">Р - У</span>
+                                        </button>
+                                        <button type="submit" value="Ф-Ч" name="alphabet_range" class="btn btn-light btn-icon-split {% if 'Ф-Ч' in request.GET.values %} active {% endif %}"">
+                                            <span class="text">Ф - Ч</span>
+                                        </button>
+                                        <button type="submit" value="Ш-Я" name="alphabet_range" class="btn btn-light btn-icon-split {% if 'Ш-Я' in request.GET.values %} active {% endif %}"">
+                                            <span class="text">Ш - Я</span>
+                                        </button>
+                                    </div>
+                                    {% else %}
+                                <form id="filterForm">
                                     <label>Компания:
                                         <input type="text"  class="form-control form-control-sm" value="{{ filter_company }}" name="company">
                                     </label>
@@ -55,10 +80,12 @@
                                         </label>
                                     {% endif %}
 
-                                    <button type="submit" class="btn btn-primary btn-icon-split"><span class="text">Поиск</span></button>
                                     <button type="reset" class="btn-reset-js btn btn-danger btn-icon-split"><span class="text">Сбросить</span></button>
+                                    <button type="submit" class="btn btn-primary btn-icon-split"><span class="text">Поиск</span></button>
                                 </form>
+                                {% endif %}
                             </div>
+
                         </div>
                     </div>
 

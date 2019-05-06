@@ -1,7 +1,9 @@
+from functools import reduce
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView
 from django.contrib.auth import logout as auth_logout
 from django.views.generic.edit import View
+from django.db.models import Q
 
 from apps.accounts.models import User
 from apps.accounts.choices import SectionUser
@@ -22,12 +24,28 @@ class ListUsersView(ListView):
         section = self.request.GET.get('section')
         company = self.request.GET.get('company')
 
-        if section:
-            queryset = queryset.filter(section=section)
+        if 'alphabet' in self.request.path:
+            symbols = list('абвгдеёжзийклмнопрстуфхцчшщъыьэюя')
+            alphabet_range = self.request.GET.get('alphabet_range')
+            if alphabet_range:
+                alphabet_list = alphabet_range.lower().split('-')
 
-        if company:
-            queryset = queryset.filter(company__title__icontains=company)
-
+                try:
+                    start_letter = symbols.index(alphabet_list[0])
+                    end_letter = symbols.index(alphabet_list[-1]) + 1
+                    if end_letter == 'я':
+                        symbols = symbols[start_letter:]
+                    else:
+                        symbols = symbols[start_letter:end_letter]
+                except ValueError:
+                    pass
+                query = reduce(lambda q, letter: q | Q(last_name__istartswith=letter), symbols, Q())
+                queryset = queryset.filter(query)
+        else:
+            if section:
+                queryset = queryset.filter(section=section)
+            if company:
+                queryset = queryset.filter(company__title__icontains=company)
         return queryset
 
     def get_context_data(self, **kwargs):

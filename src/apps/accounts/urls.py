@@ -7,5 +7,6 @@ app_name = 'accounts'
 urlpatterns = [
     path('user/<int:pk>/', DetaiUsersView.as_view(), name='detail'),
     path('users/', ListUsersView.as_view(), name='users'),
+    path('users/alphabet/', ListUsersView.as_view(), name='users_alphabet'),
     path('logout/', LogoutFormView.as_view(), name='logout'),
 ]

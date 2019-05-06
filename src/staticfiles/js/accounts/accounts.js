@@ -10,22 +10,30 @@ $(document).ready(function () {
         location.href = url;
     });
 
-    // Фильтрация
-    var form = $('#filterForm');
-    $(form).submit(function (e) {
-        e.preventDefault();
-        var data = form.serialize();
-        var url_res = form.attr('action') + '?' + data;
+    // Выборка по алфавиту
+    var filter = $('#filterAlphabet button');
+    $(filter).click(function (e) {
+        var data = this.value;
+        var url_res = '?alphabet_range=' + data;
         var url = new Url();
 
         if ('paginate_by' in url.query) {
             url_res += '&paginate_by=' + url.query.paginate_by;
         }
+        location.href = url_res;
+    });
 
-        // if ('sort_val' in url.query) {
-        //     url_res += '&sort_val=' + url.query.sort_val;
-        // }
+    // Фильтрация
+    var form = $('#filterForm');
+    $(form).submit(function (e) {
+        e.preventDefault();
+        var data = form.serialize();
+        var url_res = '?' + data;
+        var url = new Url();
 
+        if ('paginate_by' in url.query) {
+            url_res += '&paginate_by=' + url.query.paginate_by;
+        }
         location.href = url_res;
     });
 
