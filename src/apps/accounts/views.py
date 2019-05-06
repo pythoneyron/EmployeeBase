@@ -12,7 +12,7 @@ from apps.accounts.choices import SectionUser
 class ListUsersView(ListView):
     model = User
     template_name = 'accounts/users.html'
-    paginate_by = 10
+    paginate_by = 5
     context_object_name = 'users'
 
     def get_paginate_by(self, queryset):

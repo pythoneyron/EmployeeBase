@@ -40,6 +40,7 @@
                             <div id="dataTable_filter" class="dataTables_filter">
                                 {% if 'alphabet' in request.path %}
                                     <div id="filterAlphabet">
+                                        <label>Выборка по алфавиту: </label>
                                         <button type="submit" value="А-Г" name="alphabet_range" class="btn btn-light btn-icon-split {% if 'А-Г' in request.GET.values %} active {% endif %}">
                                             <span class="text">A - Г</span>
                                         </button>
