@@ -1,12 +1,15 @@
+import random
 from functools import reduce
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView
 from django.contrib.auth import logout as auth_logout
 from django.views.generic.edit import View
 from django.db.models import Q
+from django.db.utils import IntegrityError
 
 from apps.accounts.models import User
 from apps.accounts.choices import SectionUser
+from apps.company.models import Company
 
 
 class ListUsersView(ListView):
@@ -76,3 +79,37 @@ class LogoutFormView(View):
     def get(self, request):
         auth_logout(request)
         return redirect('/')
+
+
+def init_data():
+    file = open('names.txt', 'r')
+    company = Company.objects.all()
+    counter = 1
+    positions = ['Менеджер по PR', 'Дизайнер', 'Администратор сайта', 'Дизайнер рекламы', 'Верстальщик',
+                 'Web-интегратор', 'Python разработчик']
+    for line in file:
+        year_birth = random.randint(1980, 2000)
+        year_start = random.randint(2000, 2019)
+        phone = random.randint(79220000000, 79229999999)
+        fio_list = line.split()
+        try:
+            User.objects.create(
+                email=f'test{counter}@mail.ru',
+                username=f'test{counter}@mail.ru',
+                last_name=fio_list[0],
+                first_name=fio_list[1],
+                middle_name=fio_list[2],
+                phone_number=f'+{phone}',
+                date_birth=f'{year_birth}-01-01',
+                start_date=f'{year_start}-05-05',
+                is_active=True,
+                position=random.choice(positions),
+                company=random.choice(company),
+                section=random.randint(0, len(SectionUser.CHOICES) - 1)
+            )
+        except IntegrityError:
+            pass
+        counter += 1
+
+
+init_data()
