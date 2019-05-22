@@ -122,7 +122,6 @@ $(document).ready(function () {
                     $mainTbodyUsers.append('<td>' + userJSON['get_status'] + '</td>');
                 });
             }
-            console.log(message)
         };
 
         // Выборка по алфавиту. Отправка сообщения на WebSocket
