@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     # custom apps
     'apps.accounts',
     'apps.company',
+
+    # plugins
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -119,6 +122,18 @@ STATICFILES_DIRS = (
 )
 
 AUTH_USER_MODEL = 'accounts.User'
+
+# Channels
+GROUP_NAME_WEBSOCKET = 'events'
+ASGI_APPLICATION = "routing.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}
 
 try:
     from settings.env.development import *

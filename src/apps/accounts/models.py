@@ -87,7 +87,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         return _('Активный') if self.is_active else _('Архивный')
 
     def get_section(self):
-        return SectionUser.CHOICES[self.section][-1]
+        return str(SectionUser.CHOICES[self.section][-1])
+
+    def get_company(self):
+        return str(self.company)
 
     class Meta:
         verbose_name = _('Пользователь')
